@@ -3,7 +3,8 @@ def main():
     text = get_book_text(book_path)
     word_count = count_words(text)
     char_dict = count_characters(text)
-    sort_on(char_dict)
+    list_of_chars = dict_to_list(char_dict)
+    print_report(book_path, word_count, list_of_chars)
 
 def get_book_text(path):
     with open(path) as f:
@@ -29,16 +30,19 @@ def dict_to_list(dict):
     for key in dict:
         if key.isalpha():
             # add to list as dict with separate "num" key and its value
-            dict_list.append({"char": f"{key}", "count" : f"{dict[key]}"})
+            dict_list.append({"char": key, "count" : dict[key]})
     return dict_list
 
 def sort_on(dict):
     return dict["count"]
 
-def print_report(path, num_words, char_dict):
+def print_report(path, num_words, dict_list):
     print(f"--- Begin report of {path} ---")
     print(f"{num_words} words found in the document")
-    # TODO: print out in descending order, letters and the number of times they appear
+    print()
+    dict_list.sort(reverse=True, key=sort_on)
+    for i in range(0, len(dict_list)):
+        print(f"The '{dict_list[i]['char']}' character was found {dict_list[i]['count']} times")
     print("--- End of report ---")
 
 main()
